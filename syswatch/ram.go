@@ -12,7 +12,7 @@ func readMemInfo() {
 	file, err := os.Open("/proc/meminfo")
 
 	if err != nil {
-		fmt.Println("Error: ", err)
+		fmt.Printf("Error: %v\n", err)
 		return
 	}
 	defer file.Close()
@@ -30,7 +30,7 @@ func readMemInfo() {
 			total, err = strconv.ParseUint(fields[1], 10, 64)
 
 			if err != nil {
-				fmt.Println("Error:", err)
+				fmt.Printf("Error: %v\n", err)
 				return
 			}
 		}
@@ -40,14 +40,14 @@ func readMemInfo() {
 			available, err = strconv.ParseUint(fields[1], 10, 64)
 
 			if err != nil {
-				fmt.Println("Error:", err)
+				fmt.Printf("Error: %v\n", err)
 				return
 			}
 		}
 	}
 
 	if err := scanner.Err(); err != nil {
-		fmt.Println("Error: ", err)
+		fmt.Printf("Error: %v\n", err)
 		return
 	}
 

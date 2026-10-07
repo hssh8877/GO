@@ -13,6 +13,9 @@ func main() {
 	hostname := getHostname()
 	fmt.Printf("Hostname: %s\n", hostname)
 	fmt.Println("-----------------------")
+	fmt.Println("Uptime")
+	readUptime()
+	fmt.Println("-----------------------")
 	fmt.Println("Memory")
 	readMemInfo()
 	fmt.Println("-----------------------")
@@ -35,6 +38,9 @@ func main() {
 	usagePercent := float64(busy) / float64(total) * 100
 	fmt.Printf("CPU-Usage: %.2f%%\n", usagePercent)
 	readCPUDetails()
+	fmt.Println("-----------------------")
+
+	fmt.Println("Disk")
 
 	readDiskInfo()
 

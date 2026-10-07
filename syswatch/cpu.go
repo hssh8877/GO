@@ -13,7 +13,7 @@ func calcCpuUsage() (uint64, uint64, uint64) {
 	file, err := os.Open("/proc/stat")
 
 	if err != nil {
-		fmt.Println("Error: ", err)
+		fmt.Printf("Error: %v\n", err)
 		return 0, 0, 0
 	}
 	defer file.Close()
@@ -28,19 +28,19 @@ func calcCpuUsage() (uint64, uint64, uint64) {
 
 			user, err := strconv.ParseUint(fields[1], 10, 64)
 			if err != nil {
-				fmt.Println("Error: ", err)
+				fmt.Printf("Error: %v\n", err)
 				return 0, 0, 0
 			}
 
 			system, err := strconv.ParseUint(fields[3], 10, 64)
 			if err != nil {
-				fmt.Println("Error: ", err)
+				fmt.Printf("Error: %v\n", err)
 				return 0, 0, 0
 			}
 
 			idle, err := strconv.ParseUint(fields[4], 10, 64)
 			if err != nil {
-				fmt.Println("Error: ", err)
+				fmt.Printf("Error: %v\n", err)
 				return 0, 0, 0
 			}
 
@@ -49,7 +49,7 @@ func calcCpuUsage() (uint64, uint64, uint64) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		fmt.Println("Error: ", err)
+		fmt.Printf("Error: %v\n", err)
 		return 0, 0, 0
 	}
 
@@ -60,7 +60,7 @@ func readCPUDetails() {
 	file, err := os.Open("/proc/cpuinfo")
 
 	if err != nil {
-		fmt.Println("Error: ", err)
+		fmt.Printf("Error: %v\n", err)
 		return
 	}
 	defer file.Close()
@@ -109,7 +109,7 @@ func readCPUDetails() {
 	}
 
 	if err := scanner.Err(); err != nil {
-		fmt.Println("Error: ", err)
+		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
