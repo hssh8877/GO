@@ -13,19 +13,30 @@ func main() {
 	hostname := getHostname()
 	fmt.Printf("Hostname: %s\n", hostname)
 	fmt.Println("-----------------------")
+
 	fmt.Println("Uptime")
 	readUptime()
 	fmt.Println("-----------------------")
+
 	fmt.Println("Memory")
 	readMemInfo()
 	fmt.Println("-----------------------")
+
 	fmt.Println("CPU")
 
-	user1, system1, idle1 := calcCpuUsage()
+	user1, system1, idle1, err := calcCpuUsage()
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+
 	time.Sleep(1 * time.Second)
 
-	user2, system2, idle2 := calcCpuUsage()
-	time.Sleep(1 * time.Second)
+	user2, system2, idle2, err := calcCpuUsage()
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
 
 	userFinal := user2 - user1
 	systemFinal := system2 - system1
@@ -33,15 +44,19 @@ func main() {
 
 	total := userFinal + systemFinal + idleFinal
 
+	if total == 0 {
+		fmt.Println("Error: no CPU time recorded")
+		return
+	}
+
 	busy := userFinal + systemFinal
 
 	usagePercent := float64(busy) / float64(total) * 100
 	fmt.Printf("CPU-Usage: %.2f%%\n", usagePercent)
+
 	readCPUDetails()
 	fmt.Println("-----------------------")
 
 	fmt.Println("Disk")
-
 	readDiskInfo()
-
 }

@@ -9,12 +9,10 @@ import (
 	"strings"
 )
 
-func calcCpuUsage() (uint64, uint64, uint64) {
+func calcCpuUsage() (uint64, uint64, uint64, error) {
 	file, err := os.Open("/proc/stat")
-
 	if err != nil {
-		fmt.Printf("Error: %v\n", err)
-		return 0, 0, 0
+		return 0, 0, 0, fmt.Errorf("open /proc/stat: %w", err)
 	}
 	defer file.Close()
 
@@ -26,34 +24,35 @@ func calcCpuUsage() (uint64, uint64, uint64) {
 		if strings.HasPrefix(line, "cpu ") {
 			fields := strings.Fields(line)
 
+			if len(fields) < 5 {
+				return 0, 0, 0, fmt.Errorf("unexpected format in /proc/stat")
+			}
+
 			user, err := strconv.ParseUint(fields[1], 10, 64)
 			if err != nil {
-				fmt.Printf("Error: %v\n", err)
-				return 0, 0, 0
+				return 0, 0, 0, fmt.Errorf("parse CPU user time: %w", err)
 			}
 
 			system, err := strconv.ParseUint(fields[3], 10, 64)
 			if err != nil {
-				fmt.Printf("Error: %v\n", err)
-				return 0, 0, 0
+				return 0, 0, 0, fmt.Errorf("parse CPU system time: %w", err)
 			}
 
 			idle, err := strconv.ParseUint(fields[4], 10, 64)
 			if err != nil {
-				fmt.Printf("Error: %v\n", err)
-				return 0, 0, 0
+				return 0, 0, 0, fmt.Errorf("parse CPU idle time: %w", err)
 			}
 
-			return user, system, idle
+			return user, system, idle, nil
 		}
 	}
 
 	if err := scanner.Err(); err != nil {
-		fmt.Printf("Error: %v\n", err)
-		return 0, 0, 0
+		return 0, 0, 0, fmt.Errorf("read /proc/stat: %w", err)
 	}
 
-	return 0, 0, 0
+	return 0, 0, 0, fmt.Errorf("CPU statistics not found in /proc/stat")
+
 }
 
 func readCPUDetails() {

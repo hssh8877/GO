@@ -36,7 +36,6 @@ func readUptime() {
 		remaining %= 3600
 
 		minutes := remaining / 60
-		remaining %= 60
 
 		fmt.Printf("Days: %d\n", days)
 		fmt.Printf("Hours: %d\n", hours)
